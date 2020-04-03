@@ -46,7 +46,6 @@ def get_fab_pub_results_csv():
         paper = text_lambda(item.find('span', {'class': 'papertitle'}))
         if (paper != None):
             paper_year = current_year
-            paper_title = paper
             paper_authors = text_lambda(item.find('span', {'class': 'paperauthors'}))
             paper_abstract = text_lambda(item.find('span', {'class': 'paperdetails'}))
             paper_doi = href_lambda(item.find('a', {'class': 'btn-doi'}))
@@ -54,8 +53,9 @@ def get_fab_pub_results_csv():
             paper_page = href_lambda(item.find('a', {'class': 'btn-pages'}))
             paper_pdf = href_lambda(item.find('a', {'class': 'btn-pdf'}))
 
-            match_conf = conf_re.findall(paper_title)
+            match_conf = conf_re.findall(paper)
             paper_conf = conf_lambda(match_conf[-1]) if match_conf else None
+            paper_title = paper.replace("(" + paper_conf + ")" if paper_conf else "", "")
 
             paper_item = [paper_year, paper_title, paper_abstract, paper_authors, paper_doi, paper_pdf, paper_video, paper_page, paper_conf]
             debug_print("Paper", paper_item)
